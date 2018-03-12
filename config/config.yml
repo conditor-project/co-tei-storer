@@ -1,0 +1,15 @@
+%YAML 1.2
+---
+
+parameters:
+  ELASTIC_URL: 127.0.0.1:9200
+  ELASTIC_VERSION: '6.1'
+
+elastic:
+  clients:
+    main:
+      hosts: %env(ELASTIC_URL)% # String, String[], Object[]
+      apiVersion: %env(ELASTIC_VERSION)%
+      requestTimeout: 30000
+      log: # Possible values: error, info, trace, warning, debug
+        - error
