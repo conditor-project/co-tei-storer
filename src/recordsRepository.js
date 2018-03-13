@@ -11,7 +11,7 @@ recordsRepository.buildUpdateTeiBody = function(docObjects) {
     .compact()
     .transform(
       (accu, docObject) => {
-        accu.push({update: {_index: 'records', _type: 'record', _id: docObject.idElasticsearch}});
+        accu.push({update: {_id: docObject.idElasticsearch}});
         accu.push({doc: {teiBlob: docObject.teiBlob}});
       },
       []
@@ -25,7 +25,11 @@ recordsRepository.buildIndexBody = function(docObjects) {
     .compact()
     .transform(
       (accu, docObject) => {
-        accu.push({index: {_index: 'records', _type: 'record', _id: docObject.idElasticsearch}});
+        const indexPayload = {};
+        if (_.has(docObject, 'idElasticsearch')) {
+          indexPayload._id = docObject.idElasticsearch;
+        }
+        accu.push({index: indexPayload});
         accu.push(docObject);
       },
       []
@@ -39,7 +43,7 @@ recordsRepository.buildDeleteBody = function(docObjects) {
     .compact()
     .transform(
       (accu, docObject) => {
-        accu.push({delete: {_index: 'records', _type: 'record', _id: docObject.idElasticsearch}});
+        accu.push({delete: {_id: docObject.idElasticsearch}});
       },
       []
     )

@@ -9,7 +9,7 @@ const
   config         = require('config-component').get()
 ;
 
-const indiceName = config.tmpIndiceName;
+const indiceName = config.elastic.indiceName;
 
 describe('createIndiceNx(indiceName:String, indiceConfig:Object)', function() {
   after(function() {

@@ -2,10 +2,10 @@
 
 const business = module.exports = {};
 
-const _                  = require('lodash'),
-      fs                 = require('fs-extra'),
-      esClient           = require('./src/esClient'),
-      buildUpdateTeiBody = require('./src/recordsRepository').buildUpdateTeiBody
+const _                   = require('lodash'),
+      fs                  = require('fs-extra'),
+      recordsManager      = require('./src/recordsManager'),
+      bulkResponseHandler = require('./src/bulkResponseHandler')
 ;
 
 business.doTheJob = function(docObject, cb) {
@@ -14,7 +14,8 @@ business.doTheJob = function(docObject, cb) {
 };
 
 business.finalJob = function(docObjects, cb) {
-  const errorDocObjects = [];
+  let errorDocObjects = [];
+
   const promises = docObjects.map((docObject) => {
     return fs.readFile(docObject.path, 'base64')
              .then((result) => {
@@ -30,18 +31,20 @@ business.finalJob = function(docObjects, cb) {
 
   Promise
     .all(promises)
-    .then((results) => {
-      const body = buildUpdateTeiBody(results);
+    .then((docObjects) => {
+      return recordsManager.updateRecords(docObjects);
+    })
+    .then((response) => {
+      if (!response.errors) return;
+      const errorItems = bulkResponseHandler.filterErrorItems(response);
+      const bulkErrorDocObjects = bulkResponseHandler.removeErrorDocObjects(docObjects, errorItems);
+      errorDocObjects = errorDocObjects.concat(bulkErrorDocObjects);
 
-      return esClient.bulk({body: body});
     })
-    .then(function(response) {
-      console.dir(response, {depth:10})
-      _handleBulkUpdateErrors(response, docObjects, errorDocObjects);
+    .then(() => {
       _cleanUpDocObjects(docObjects, errorDocObjects);
-      return errorDocObjects;
+      return cb(errorDocObjects);
     })
-    .then(cb)
     .catch(cb)
   ;
 
@@ -55,17 +58,5 @@ function _cleanUpDocObjects (docObjects, errorDocObjects) {
   _.forEach(errorDocObjects, (docObject) => {
     _.unset(docObject, 'teiBlob');
     docObject.hasStoredTei = false;
-  });
-}
-
-function _handleBulkUpdateErrors (response, docObjects, returnErrors) {
-  if(!response.errors) return;
-  _.intersectionWith(_.clone(docObjects), _.get(response, 'items', []), (docObject, updateItem) => {
-    if (docObject.idElasticsearch === +_.get(updateItem, 'update._id')) {
-      docObject.error = _.get(updateItem, 'update.error', new Error('Update Error'));
-      returnErrors.push(docObject);
-      _.pull(docObjects, docObject);
-      return true;
-    }
   });
 }

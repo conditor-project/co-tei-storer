@@ -6,6 +6,7 @@ parameters:
   ELASTIC_VERSION: '6.1'
 
 elastic:
+  indiceName: records
   clients:
     main:
       hosts: %env(ELASTIC_URL)% # String, String[], Object[]

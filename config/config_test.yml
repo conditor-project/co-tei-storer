@@ -4,4 +4,5 @@
 imports:
   - resource: config.yml
 
-tmpIndiceName: tmp-co-tei-storer
+elastic:
+  indiceName: tmp-co-tei-storer
