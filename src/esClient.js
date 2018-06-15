@@ -1,7 +1,7 @@
 'use strict';
 
 const es     = require('elasticsearch'),
-      config = require('config-component').get(),
+      config = require('config-component').get(module),
       _      = require('lodash')
 ;
 
