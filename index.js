@@ -34,6 +34,11 @@ business.finalJob = function(docObjects, cb) {
     .then((docObjects) => {
       return recordsManager.updateRecords(docObjects);
     })
+    .catch((reason) => {
+      docObjects.length = 0;
+      reason.errMessage = reason.message || 'Error during update process';
+      throw reason;
+    })
     .then((response) => {
       if (!response.errors) return;
       const errorItems = bulkResponseHandler.filterErrorItems(response);
