@@ -4,7 +4,7 @@
   "description": "Store TEI content into Elastic",
   "main": "index.js",
   "scripts": {
-    "test": "export NODE_ENV=test; mocha"
+    "test": "NODE_ENV=test nyc mocha"
   },
   "repository": {
     "type": "git",
@@ -27,10 +27,13 @@
     "bluebird": "^3.5.1",
     "co-config": "git+https://github.com/conditor-project/co-config.git#master",
     "config-component": "git+https://github.com/Inist-CNRS/node-config-component.git#master",
-    "elasticsearch": "^14.2.2",
-    "fs-extra": "^5.0.0",
-    "lodash": "^4.17.10",
+    "elasticsearch": "^15.2.0",
+    "fs-extra": "^7.0.1",
+    "lodash": "^4.17.10"
+  },
+  "devDependencies": {
     "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
     "should": "^13.2.1"
   }
 }
