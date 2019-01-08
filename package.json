@@ -25,7 +25,7 @@
   "dependencies": {
     "async": "^2.6.1",
     "bluebird": "^3.5.1",
-    "co-config": "git+https://github.com/conditor-project/co-config.git#fieldsRefactoring",
+    "co-config": "git+https://github.com/conditor-project/co-config.git",
     "config-component": "git+https://github.com/Inist-CNRS/node-config-component.git#master",
     "elasticsearch": "^15.2.0",
     "fs-extra": "^7.0.1",
