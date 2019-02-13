@@ -3,10 +3,11 @@
 
 parameters:
   ELASTIC_URL: 127.0.0.1:9200
-  ELASTIC_VERSION: '6.1'
+  ELASTIC_VERSION: '6.5'
+  ELASTIC_INDEX: 'records'
 
 elastic:
-  indiceName: records
+  indiceName: %env(ELASTIC_INDEX)%
   clients:
     main:
       hosts: %env(ELASTIC_URL)% # String, String[], Object[]
