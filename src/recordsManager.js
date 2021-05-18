@@ -4,7 +4,7 @@ const recordsManager = module.exports = {};
 
 const esClient          = require('./esClient'),
       recordsRepository = require('./recordsRepository'),
-      config            = require('config-component').get(module)
+      config            = require('@istex/config-component').get(module)
 ;
 
 const getBulkParams = () => {

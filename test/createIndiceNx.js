@@ -6,7 +6,7 @@ const
   createIndiceNx = require('../helpers/createIndiceNx'),
   deleteIndiceIx = require('../helpers/deleteIndiceIx'),
   indiceConfig   = require('co-config/mapping'),
-  config         = require('config-component').get(module)
+  config         = require('@istex/config-component').get(module)
 ;
 
 const indiceName = config.elastic.indiceName;
